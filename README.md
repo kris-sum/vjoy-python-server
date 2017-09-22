@@ -1,6 +1,8 @@
 Network Server
 ===
 
+> Pre-requisite: vJoy from http://vjoystick.sourceforge.net/
+
 The server listens to UDP on port 5001. The format is pretty simple, send ascii strings in the following format:
 
     joystick,inputType,context,state
@@ -10,6 +12,7 @@ The server listens to UDP on port 5001. The format is pretty simple, send ascii 
 | [1-4] | button | [1-9] | [0-1] | turns button [1-9] [off-on] on joystick [1-4], e.g. |
 | [1-4] | axis | [x,y,z] | [-1,0,1] | makes joystick [1-4] axis [x,y,z] move [left, neutral, right], e.g. |
 
+Examples:
 
     1,button,1,1 : turns joystick 1 button 1 on
     1,button,1,0 : turns joystick 1 button 1 off
