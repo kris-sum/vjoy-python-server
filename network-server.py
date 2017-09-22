@@ -27,7 +27,11 @@ def handleResponse( dataString ):
     dataString = data.decode("utf-8")
     parts = dataString.split(',')
 
-    joystickId = int(parts[0])
+    try:
+        joystickId = int(parts[0])
+    except:
+        print ("Joystick " + parts[0] + " not available")
+        return
 
     if (not (joystickId in vjoyDevices)):
         print ("Joystick " + str(joystickId) + " not available")
@@ -36,7 +40,11 @@ def handleResponse( dataString ):
     j = vjoyDevices[joystickId]
 
     if parts[1] == "button":
-        buttonNumber = int(parts[2])
+        try:
+            buttonNumber = int(parts[2])
+        except:
+             print ("Button " + parts[2] + " not valid")
+             return
         if parts[3] == "1":
             buttonOn = 1
         else:
@@ -52,6 +60,9 @@ def handleResponse( dataString ):
             axis = pyvjoy.HID_USAGE_Y
         if parts[2] == "z":
             axis = pyvjoy.HID_USAGE_Z
+        
+        if axis is None:
+            return
 
         if parts[3] == "1":
             value = 0x8000        
@@ -61,6 +72,14 @@ def handleResponse( dataString ):
             value = 0x4000
 
         j.set_axis(axis, value)
+
+    if parts[1] == "reset":
+        j.reset()
+        j.reset_buttons()
+        j.reset_povs()
+        j.set_axis(pyvjoy.HID_USAGE_X,  0x4000)
+        j.set_axis(pyvjoy.HID_USAGE_Y,  0x4000)
+        j.set_axis(pyvjoy.HID_USAGE_Z,  0x4000)
 
     return
 
