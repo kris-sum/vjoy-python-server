@@ -1,3 +1,5 @@
+from threading import Thread
+from time import sleep
 import pyvjoy
 import socket
 
@@ -50,6 +52,14 @@ def handleResponse( dataString ):
         else:
             buttonOn = 0
 
+        if (len(parts)>4):
+            try:
+                delay = int(parts[4])
+                myThread = Thread(target=resetButton, args=(delay, j, buttonNumber))
+                myThread.start()
+            except:
+                print ("unknown delay " +parts[4])
+
         j.set_button(buttonNumber, buttonOn)
         return
 
@@ -71,6 +81,14 @@ def handleResponse( dataString ):
         else:
             value = 0x4000
 
+        if (len(parts)>4):
+            try:
+                delay = int(parts[4])
+                myThread = Thread(target=resetAxis, args=(delay, j, axis))
+                myThread.start()
+            except:
+                print ("unknown delay " +parts[4])
+
         j.set_axis(axis, value)
 
     if parts[1] == "reset":
@@ -82,6 +100,16 @@ def handleResponse( dataString ):
         j.set_axis(pyvjoy.HID_USAGE_Z,  0x4000)
 
     return
+
+
+def resetAxis(delay, j, axis):
+    sleep(delay / 1000.0)
+    j.set_axis(axis,  0x4000)
+
+def resetButton(delay, j, buttonNumber):
+    sleep(delay / 1000.0)
+    j.set_button(buttonNumber, 0)
+
 
 # start listening loop
 
