@@ -13,6 +13,9 @@ for i in range (1,5):
         vjoyDevices[i].reset()
         vjoyDevices[i].reset_buttons()
         vjoyDevices[i].reset_povs()
+        vjoyDevices[i].set_axis(pyvjoy.HID_USAGE_X, 0x4000)
+        vjoyDevices[i].set_axis(pyvjoy.HID_USAGE_Y,  0x4000)
+        vjoyDevices[i].set_axis(pyvjoy.HID_USAGE_Z,  0x4000)
         print("Joystick device " + str(i) + " found")
     except:
         print("Joystick device " + str(i) + " not found")
