@@ -16,6 +16,7 @@ for i in range (1,5):
         vjoyDevices[i].set_axis(pyvjoy.HID_USAGE_X, 0x4000)
         vjoyDevices[i].set_axis(pyvjoy.HID_USAGE_Y,  0x4000)
         vjoyDevices[i].set_axis(pyvjoy.HID_USAGE_Z,  0x4000)
+        
         print("Joystick device " + str(i) + " found")
     except:
         print("Joystick device " + str(i) + " not found")
@@ -94,6 +95,38 @@ def handleResponse( dataString ):
 
         j.set_axis(axis, value)
 
+    if parts[1] == "pov":
+        try:
+            pov = int(parts[2])
+        except:
+            print ("unknown pov " + parts[2])
+            return
+
+        if parts[3] == "neutral" or parts[3] == "reset":
+            value = -1
+        if parts[3] == "up":
+            value = 0x0
+        if parts[3] == "right":
+            value = 0x1
+        if parts[3] == "down":
+            value = 0x2
+        if parts[3] == "left":
+            value = 0x3
+
+        if not ('value' in locals()):
+            print ("unknown pov value " +parts[3])
+            return
+
+        if (len(parts)>4):
+            try:
+                delay = int(parts[4])
+                myThread = Thread(target=resetPov, args=(delay, j, pov))
+                myThread.start()
+            except:
+                print ("unknown delay " +parts[4])
+
+        j.set_disc_pov(pov, value)
+
     if parts[1] == "reset":
         j.reset()
         j.reset_buttons()
@@ -104,10 +137,13 @@ def handleResponse( dataString ):
 
     return
 
-
 def resetAxis(delay, j, axis):
     sleep(delay / 1000.0)
     j.set_axis(axis,  0x4000)
+
+def resetPov(delay, j, pov):
+    sleep(delay / 1000.0)
+    j.set_disc_pov(pov, -1)
 
 def resetButton(delay, j, buttonNumber):
     sleep(delay / 1000.0)
