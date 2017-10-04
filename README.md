@@ -13,6 +13,7 @@ The server listens to UDP on port 5001. The format is pretty simple, send ascii 
 | [1-4] | button | [1-9] | [0-1] | 100 | presses button [1-9] [off-on] on joystick [1-4] for 100ms |
 | [1-4] | axis | [x,y,z] | [-1,0,1] | - | makes joystick [1-4] axis [x,y,z] move [left, neutral, right] |
 | [1-4] | axis | [x,y,z] | [-1,0,1] | 200 | makes joystick [1-4] axis [x,y,z] move [left, neutral, right] for 200ms |
+| [1-4] | pov | [1-4] | [up,down,left,right,reset] | - | moves pov[1-4] in the direction indicated. (discrete POV, not continuous POV)
 | [1-4] | reset |  |  |  | resets joystick [1-4] buttons/pov/axis to neutral |
 
 Examples:
